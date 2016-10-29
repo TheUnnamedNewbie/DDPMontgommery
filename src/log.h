@@ -8,6 +8,13 @@
 #ifndef SRC_LOG_H_
 #define SRC_LOG_H_
 
+//#define DebugOnMain
+//#define DebugOnMPArithmatic
+//#define DebugOnLogging
+//#define DebugOnBlank
+//#define DebugOnPerformance
+//#define DebugOnMontgommery
+
 typedef enum {
 	INFO,			//IF YOU EDIT THIS
 	MESSAGE,		//FOR THE LOVE OF GOD

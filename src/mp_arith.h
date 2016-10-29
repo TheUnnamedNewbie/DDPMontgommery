@@ -25,6 +25,7 @@ void mod_add(uint32_t *a, uint32_t *b, uint32_t *N, uint32_t *res, uint32_t size
 // a and b represent operands, N is the modulus. They are large integers stored in uint32_t arrays of size elements
 void mod_sub(uint32_t *a, uint32_t *b, uint32_t *N, uint32_t *res, uint32_t size);
 
+uint32_t mp_eq(uint32_t *a, uint32_t *b, uint32_t size);
 
 
 

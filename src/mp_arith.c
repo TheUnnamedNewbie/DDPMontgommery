@@ -170,5 +170,13 @@ uint32_t mp_leq(uint32_t *a, uint32_t *b, uint32_t size){
 	return ((*(a+i)) <= (*(b+i)));
 }
 
+uint32_t mp_eq(uint32_t *a, uint32_t *b, uint32_t size){
+	uint32_t result = memcmp(a, b, size);
+	#ifdef DebugOnMPArithmatic
+	 	 LogWithNum(MP_ARITHMATIC, DEBUG, "Comparing two mp numbers, result: ", result);
+	#endif
+	if(!result){return 1;}
+	else {return 0;}
+}
 
 

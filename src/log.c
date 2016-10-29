@@ -6,6 +6,7 @@
  */
 
 
+
 #include <stdio.h>
 #include "platform.h"
 #include "xil_printf.h"
@@ -15,8 +16,6 @@
 #include "log.h"
 #include "performance_counters.h"
 /*
- * TODO:
- * Should be able to add timestaps using the performance.h files. Will have to look into this
  * TODO:
  * Can speed this up with less consecutive printf statements and using just one.
  */
@@ -40,8 +39,7 @@ const char* LogLevelToString(LogLevel level);
 const char* LogSubSystemToString(LogSubSystem sys);
 
 /*
- * Log an error. TODO: THIS IS NOT DONE YET
- * maybe add time or smthin
+ * Log an error.
  *
  *
  * AUTH JOREN VAES
@@ -73,8 +71,6 @@ int Log(LogSubSystem sys, LogLevel level, char *msg){
 }
 
 /*
- * This doesn't seem to work yet
- *
  * AUTH JOREN VAES
  *
  */
@@ -86,6 +82,12 @@ int LogWithNum(LogSubSystem sys, LogLevel level, char *msg, int number){
 	}
 	return succes;
 }
+
+/*
+ * AUTH JOREN VAES
+ *
+ * Hexadecimal version of logWithNum
+ */
 
 int LogWithNumH(LogSubSystem sys, LogLevel level, char *msg, int number){
 	int succes;
