@@ -23,64 +23,50 @@ void subCondMont(uint32_t *u, uint32_t *n, uint32_t S);
 void mont(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, uint32_t SIZE);
 
 void mont(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, uint32_t SIZE){
-	//SetLogLevel(INFO);
+
+	#ifdef DebugOn
+		SetLogLevel(INFO);
+	#endif
+
 	fips(a, b, n, n0, res, SIZE);
+
+	#ifdef DebugOn
 	SetLogLevelDefault();
+	#endif
+
 }
 
+
+/*
+ * TODO: MAKE THIS GO FASTER
+ * Don't ever remove this, there will always be a way
+ *
+ */
 void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, uint32_t SIZE){
-
-
-
-	//	FIPS method
-	//  t has 3 elements
-	//  m has size + 1
-
-
 
 	uint32_t t[3];
 	uint32_t m[SIZE+1];
 	int i, j;
-
-
-
-	// 2: t <- 0
 	t[2]=t[1]=t[0]=0;
-	// 3: m <- 0
+	//THIS SHOULDN'T BE NEEDED
+
 	for(i = 0; i<= SIZE; i++){
 			m[i] = 0;
 	}
 
 
-	//while(1!=2){} //WAIT FOR ENTROPY TO DO IT'S THING
-
-	// 4: for 0 <= i < SIZE do
-
 	uint64_t sum;
 	uint32_t S, C;
 
 	for(i=0; i< SIZE; i++){
-
-
-	// 5: for 0 <= j < i do
-	// 6: sum <- t[0] + a[j] * b[i-j]
-	// 7: C, S <- sum(2w-1...2), sum(w-1...0)
-	// 8: ADD(t, 1, C)
-	// 9: sum <- S + m[j] * n[i-j]
-	// 10: C, S <- sum(2w-1...w), sum(w-1...0)
-	// 11: t[0] <- S
-	// 12: ADD(t, 1, C)
-	// 13: end for
-
-
-
 		for(j = 0; j< i; j++){
 
-			sum = (uint64_t)t[0] + (uint64_t)a[j]*(uint64_t)b[i-j];
+			//Things to look into:
+
+
+			sum = (uint64_t)t[0] + (uint64_t)a[j]*(uint64_t)b[i-j]; //Sure as hell looks a lot like a multiply-accumulate - UMLAL
 			S = (uint32_t)sum;
 			C = (uint32_t)(sum>>32);
-			LogWithNumH(MONTGOMMERY, INFO, "s = ", S);
-			LogWithNumH(MONTGOMMERY, INFO, "c = ", C);
 			addMont(t, 1, C);
 			sum = (uint64_t)S + (uint64_t)m[j]*(uint64_t)n[i-j];
 			S = (uint32_t)sum;
@@ -89,123 +75,60 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 			addMont(t, 1, C);
 		}
 
-		// 14: sum <- t[0] + a[i]*b[0]
-
 		sum = (uint64_t)t[0] + (uint64_t)a[i]*(uint64_t)b[0];
-
-		// 15: C, S <- sum(2w-1...w), sum(w-1...0)
-
-		S = (uint32_t)sum;
+		S = (uint32_t)sum;			//Probably easier to just work 64bit here
 		C = (uint32_t)(sum>>32);
 
-		// 16: ADD(t, 1, C)
-
 		addMont(t, 1, C);
-
-		// 17: m[i] = (S*n0')(w-1..0)
 
 		m[i]= (uint32_t)( n0[0] * S); 		// Because we only need the last 32 bits of n, we can just start of with the last part and ignore the rest (because it will overflow anyways)
-
-		// 18: sum <- S + m[i]*n[0]
-
-		sum = (uint64_t)S + (uint64_t)m[i] * (uint64_t)n[0];
-
-		// 19: C, S <- sum(2w-1...w), sum(w-1...0)
-
+		sum = (uint64_t)S + (uint64_t)m[i] * (uint64_t)n[0];   //UMLAL
 		S = (uint32_t)sum;
 		C = (uint32_t)(sum>>32);
 
-		// 20: ADD(t, 1, C)
-
 		addMont(t, 1, C);
-
-		// 21: t[0] <- t[1]
-		// 22: t[1] <- t[2]
-		// 23: t[2] <- 0
 
 		t[0] = t[1];
 		t[1] = t[2];
 		t[2] = 0;
-
-		// 24: end for
-
 	}
-
-	// 25: for SIZE <= i < 2*SIZE do
 
 	for(i = SIZE; i < 2*SIZE; i++){  // ASUMING THAT SIZE WILL NEVER BE MORE THAN 31 BITS LONG
 
-		// 26: for i - SIZE + 1 <= j < SIZE do
-
 		for(j = (i - SIZE + 1); j < SIZE; j++){
 
-			// 27: sum <- t[0] + a[j]*b[i-j]
-
 			sum = (uint64_t)t[0] + (uint64_t)a[j]*(uint64_t)b[i-j];
-
-			// 28: C, S <- sum(2w-1...w), sum(w-1...0)
-
 			S = (uint32_t)sum;
 			C = (uint32_t)(sum>>32);
 
-			// 29: ADD(t, 1, C)
-
 			addMont(t, 1, C);
-
-			// 30: sum <- S + m[j]*n[i-j]
 
 			sum = (uint64_t)S + (uint64_t)m[j]*(uint64_t)n[i-j];
 
-			// 31: C, S <- sum(2w-1...w), sum(w-1...0)
-
 			S = (uint32_t)sum;
 			C = (uint32_t)(sum>>32);
 
-			// 32: t[0] <- S
-
 			t[0] = S;
-
-			// 33: ADD(t, 1, C)
 
 			addMont(t, 1, C);
 
-			// 34: end for
-
 		}
 
-		// 35: m[i - SIZE] <- t[0]
-
 		m[i - SIZE] = t[0];
-
-		// 36: t[0] <- t[1]
-		// 37: t[1] <- t[2]
-		// 38: t[2] <- 0
 
 		t[0] = t[1];
 		t[1] = t[2];
 		t[2] = 0;
 
-		// 39: end for
-
 	}
-
-	// 40: m[SIZE] = t[0]
 
 	m[SIZE] = t[0];
 
-	// 41: SUB_COND(m, n, SIZE)
-
 	subCondMont(m, n, SIZE);
-
-	// 42: return m[0], ..., m[SIZE-1]
 
 	for(i = 0; i <SIZE; i++){
 		res[i] = m[i];
 	}
-
-	//nothing to do here cause pointers
-
-	// 43: end procedure
 
 }
 

@@ -80,9 +80,12 @@ int main()
 
     uint32_t SIZE = 32;
     uint32_t result[SIZE+1];
+
     xil_printf("\r\n\r\n\r\n");
-    Log(MAIN, CRITICAL, "Initializing performance counters" );
-    Log(MAIN, CRITICAL, "version 1512");
+
+   	Log(MAIN, CRITICAL, "Initializing performance counters" );
+   	Log(MAIN, CRITICAL, "version 1512");
+
 
     //Test mp_arith
 
@@ -97,17 +100,48 @@ int main()
 
     //Test montgommery
 
-    uint32_t start_time = get_cycle_counter();
-    mont(test_mont_a, test_mont_b, test_mont_N, test_mont_n_prime, result, SIZE);
-    uint32_t stop_time = get_cycle_counter();
+    uint32_t start_time_1 = get_cycle_counter();
+    mont(test_mont_a1, test_mont_b1, test_mont_N1, test_mont_n_prime1, result, SIZE);
+    uint32_t stop_time_1 = get_cycle_counter();
+
+    if(mp_eq(result, test_mont_mult_result1, SIZE-1)){
+    	Log(MAIN, DEBUG, "First test successful");
+    } else {
+    	Log(MAIN, CRITICAL, "First test failed");
+    	xprintmp(result, SIZE);
+    }
 
 
+    uint32_t start_time_2 = get_cycle_counter();
+    mont(test_mont_a2, test_mont_b2, test_mont_N2, test_mont_n_prime2, result, SIZE);
+    uint32_t stop_time_2 = get_cycle_counter();
 
-    xprintmp(result, SIZE);
+    if(mp_eq(result, test_mont_mult_result2, SIZE-1)){
+        	Log(MAIN, DEBUG, "Second test successful");
+    } else {
+    	Log(MAIN, CRITICAL, "Second test failed");
+    	xprintmp(result, SIZE);
+    }
+
+
+    uint32_t start_time_3 = get_cycle_counter();
+    mont(test_mont_a3, test_mont_b3, test_mont_N3, test_mont_n_prime3, result, SIZE);
+    uint32_t stop_time_3 = get_cycle_counter();
+
+    if(mp_eq(result, test_mont_mult_result3, SIZE-1)){
+        Log(MAIN, DEBUG, "Third test successful");
+    } else {
+       	Log(MAIN, CRITICAL, "Third test failed");
+       	xprintmp(result, SIZE);
+    }
+
+   // xprintmp(result, SIZE);
     //LogWithNum(MAIN, ERROR, "MSB RES = ", result[SIZE]);
 
 
-    uint32_t totalCycles = stop_time - start_time;
+
+
+    uint32_t totalCycles = ((stop_time_1 - start_time_1) + (stop_time_2 - start_time_2) + (stop_time_3 - start_time_3))/3;
     LogWithNum(PERFORMANCE, DEBUG, "Cyclecount = ", totalCycles);
     Log(MAIN, CRITICAL, "version 1512");
     Log(MAIN, CRITICAL, "Program Finished. Cleaning up platform and terminating...");
