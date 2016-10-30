@@ -5,6 +5,7 @@
 
 #ifndef MP_ARITH_H_
 #define MP_ARITH_H_
+#include "mode.h"
 
 
 // Calculates res = a + b.

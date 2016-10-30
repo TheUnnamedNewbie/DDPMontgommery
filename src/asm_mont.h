@@ -6,12 +6,18 @@
  */
 
 
-/*
- * I DON'T THINK ARMv7 ASM NEEDS THIS
+
 #ifndef DDPMONTGOMMERY_SRC_ASM_MONT_H_
 #define DDPMONTGOMMERY_SRC_ASM_MONT_H_
 
 
+#include <stdint.h>
+
+void montSum(uint32_t a, uint32_t b, uint32_t *t);
+
+
+
+
 
 #endif /* DDPMONTGOMMERY_SRC_ASM_MONT_H_ */
-/**/
+

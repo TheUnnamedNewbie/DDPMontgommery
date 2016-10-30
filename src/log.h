@@ -8,12 +8,8 @@
 #ifndef SRC_LOG_H_
 #define SRC_LOG_H_
 
-//#define DebugOnMain
-//#define DebugOnMPArithmatic
-//#define DebugOnLogging
-//#define DebugOnBlank
-//#define DebugOnPerformance
-//#define DebugOnMontgommery
+#include "mode.h"
+
 
 typedef enum {
 	INFO,			//IF YOU EDIT THIS
@@ -30,6 +26,7 @@ typedef enum {
 	BLANK,			//LogSubSystemToString
 	PERFORMANCE,
 	MONTGOMMERY,
+	ASMMONTGOMERY
 } LogSubSystem;	//THANKYOU
 
 
