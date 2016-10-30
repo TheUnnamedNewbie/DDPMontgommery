@@ -49,7 +49,6 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 	uint32_t m[SIZE+1];
 	int i, j;
 	t[2]=t[1]=t[0]=0;
-	//THIS SHOULDN'T BE NEEDED
 
 	for(i = 0; i<= SIZE; i++){
 			m[i] = 0;
@@ -65,17 +64,23 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 			//Things to look into:
 
 			//montSum( t[0], 0, a[j], b[i-j]); //second value has to be zero to make sure we don't lose carry info due to overflow
+			/*
 			sum = (uint64_t)t[0] + (uint64_t)a[j]*(uint64_t)b[i-j]; //Sure as hell looks a lot like a multiply-accumulate - UMLAL
 			S = (uint32_t)sum;
 			C = (uint32_t)(sum>>32);
 			addMont(t, 1, C);
-			sum = (uint64_t)S + (uint64_t)m[j]*(uint64_t)n[i-j];
+			sum = (uint64_t)S + (uint64_t)m[j]*(uint64_t)n[i-j];   //S stored in t0 in asm!
 			S = (uint32_t)sum;
 			C = (uint32_t)(sum>>32);
 			t[0] = S;
 			addMont(t, 1, C);
-		}
+			*/
 
+			montSum(a[j], b[i-j], m[j], n[i-j], t);
+
+
+		}
+		/*
 		sum = (uint64_t)t[0] + (uint64_t)a[i]*(uint64_t)b[0];
 		S = (uint32_t)sum;			//Probably easier to just work 64bit here
 		C = (uint32_t)(sum>>32);
@@ -92,12 +97,14 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 		t[0] = t[1];
 		t[1] = t[2];
 		t[2] = 0;
+		*/
+		montSum2(a[i], b[0], m[i], n[0], t, m, i, n0[0]);
 	}
 
 	for(i = SIZE; i < 2*SIZE; i++){  // ASUMING THAT SIZE WILL NEVER BE MORE THAN 31 BITS LONG
 
 		for(j = (i - SIZE + 1); j < SIZE; j++){
-
+			/*
 			sum = (uint64_t)t[0] + (uint64_t)a[j]*(uint64_t)b[i-j];
 			S = (uint32_t)sum;
 			C = (uint32_t)(sum>>32);
@@ -112,7 +119,8 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 			t[0] = S;
 
 			addMont(t, 1, C);
-
+			*/
+			montSum(a[j], b[i-j], m[j], n[i-j], t);
 		}
 
 		m[i - SIZE] = t[0];
@@ -150,8 +158,6 @@ void addMont(uint32_t *t, uint32_t i, uint32_t C){
 
 
 void subCondMont(uint32_t *u, uint32_t *n, uint32_t SIZE){
-
-
 
 	int i;
 	uint32_t B;

@@ -13,7 +13,7 @@
 //#define DebugOnLogging
 //#define DebugOnBlank
 //#define DebugOnPerformance
-#define DebugOnMontgomery
+//#define DebugOnMontgomery
 
 
 #endif /* DDPMONTGOMMERY_SRC_MODE_H_ */

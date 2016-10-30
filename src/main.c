@@ -64,8 +64,8 @@
 
 
 
-#define TestSubSystem
-//#define TestMultiplier
+//#define TestSubSystem
+#define TestMultiplier
 
 /*
 uint32_t a[32];
