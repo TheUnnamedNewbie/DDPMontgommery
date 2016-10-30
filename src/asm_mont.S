@@ -5,25 +5,34 @@
 .type montSum, %function
 
 montSum:
-PUSH {r4-r7}
-LDR r3, [r2], #4   	@r3 = t[0]
-LDR r4, [r2], #4	@r4 = t[1]
-LDR r5, [r2]		@r5 = t[2]
+PUSH {r4-r9} 		@6 regs makes for t to be at SP+24
+LDR r6, [sp, #24]	@load *t
 
-MOV r6, r3			@S = t[0]
-MOV r7, #0
+@r6 contains the pointer to t
+LDR r7, [r6], #4   	@r3 = t[0]
+LDR r8, [r6], #4	@r4 = t[1]
+LDR r9, [r6]		@r5 = t[2]
 
-UMLAL r6, r7, r0, r1 	@sum = t[0] + a*b
-ADDS r4, r4, r7			@addmont
-ADC r5, r5, #0			@addmont
+MOV r4, r7
+MOV r5, #0			@C = 0
 
-MOV r3, r6
+UMLAL r4, r5, r0, r1 	@sum = t[0] + a*b
+ADDS r8, r8, r5			@addmont
+ADC r9, r9, #0			@addmont
 
-STR r5, [r2], #-4
-STR r4, [r2], #-4
-STR r3, [r2]
+MOV r5, #0			@C = 0
 
-POP {r4-r7}
+UMLAL r4, r5, r2, r3
+ADDS r8, r8, r5
+ADC r9, r9, #0
+
+MOV r7, r4
+
+STR r9, [r6], #-4
+STR r8, [r6], #-4
+STR r7, [r6]
+
+POP {r4-r9}
 BX lr
 .endfunc
 .text

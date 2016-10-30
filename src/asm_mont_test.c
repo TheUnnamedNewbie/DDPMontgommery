@@ -16,9 +16,9 @@
 
 
 
-int test_montSum(uint32_t a, uint32_t b, uint32_t *t);
+int test_montSum(uint32_t a, uint32_t b, uint32_t m, uint32_t n, uint32_t *t);
 
-int test_montSum(uint32_t a, uint32_t b, uint32_t *t){
+int test_montSum(uint32_t a, uint32_t b, uint32_t m, uint32_t n, uint32_t *t){
 
 	uint32_t S, C;
 	uint64_t sum;
@@ -40,13 +40,21 @@ int test_montSum(uint32_t a, uint32_t b, uint32_t *t){
 	Log(ASMMONTGOMERY, DEBUG, "Starting test_montSum");
 
 	sum = (uint64_t)t[0] + (uint64_t)a*(uint64_t)b;
-	t[0] = (uint32_t)sum;			//TEMP THIS IS NOT HOW THE REAL CODE SHOULD WORK
+	S = (uint32_t)sum;			//TEMP THIS IS NOT HOW THE REAL CODE SHOULD WORK
 	C = (uint32_t)(sum>>32);
 	addMont(t, 1, C);
+	sum = (uint64_t)S + (uint64_t)m*(uint64_t)n;   //S stored in t0 in asm!
+	S = (uint32_t)sum;
+	C = (uint32_t)(sum>>32);
+	t[0] = S;
+	addMont(t, 1, C);
+
+
+
 
 	Log(ASMMONTGOMERY, DEBUG, "C-based sum complete");
 
-	montSum(a, b, tTest);
+	montSum(a, b, m, n, tTest);
 
 
 	Log(ASMMONTGOMERY, DEBUG, "AsmBased sum complete");

@@ -96,7 +96,7 @@ int main()
 	#endif
 
 	#ifdef TestSubSystem
-   		SetLogLevel(ERROR);
+   		//SetLogLevel(ERROR);
    		Log(MAIN, CRITICAL, "Testing Subsystem!");
 	#endif
 
@@ -165,8 +165,8 @@ int main()
 	    uint32_t hasError = 0;
 	    uint32_t t[3], i;
 	    t[2]=t[1]=t[0]=0;
-	    for(i = 0; i<SIZE; i++){
-	    	    	int succes = test_montSum(test_value_a[i], test_value_b[i], t);
+	    for(i = 0; i<1; i++){
+	    	    	int succes = test_montSum(test_value_a[i], test_value_b[i], test_mont_a1[i], test_mont_b1[i], t);
 	    	    	LogWithNum(ASMMONTGOMERY, CRITICAL, "Starting test number ", i);
 	    	    	if(succes){LogWithNum(ASMMONTGOMERY, CRITICAL, "test_montSum successful: ", succes);}
 	    	    	else {LogWithNum(ASMMONTGOMERY, CRITICAL, "test_montSum failed: ", succes); hasError ++;}
