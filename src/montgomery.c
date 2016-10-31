@@ -47,7 +47,7 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 
 
 
-	uint32_t t[3];
+	//uint32_t t[3];
 	uint32_t m[SIZE+1];
 	//uint64_t resultAsm;
 	//uint32_t S, C;
@@ -55,14 +55,14 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 	//for(i = 0; i<= SIZE; i++){
 	//		m[i] = 0;
 	//}// I think I'm allowed to comment this
-	montSumComplete(a, b, m, n, t, n0[0]);
+	montSumComplete(a, b, m, n, n0[0]);
 
 
 	/*for(i=0; i< SIZE; i++){
 			montSumLoop(a, b, m, n, t, i);
 			montSum2(a[i], b[0], m[i], n[0], t, m, i, n0[0]);
 	}*/
-	for(i = SIZE; i < 2*SIZE; i++){  // ASUMING THAT SIZE WILL NEVER BE MORE THAN 31 BITS LONG
+	/*for(i = SIZE; i < 2*SIZE; i++){  // ASUMING THAT SIZE WILL NEVER BE MORE THAN 31 BITS LONG
 		//for(j = (i - SIZE + 1); j < SIZE; j++){
 		montSumLoopSize(a, b, m, n, t, i, (i-SIZE+1));
 		//}
@@ -72,7 +72,7 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 		t[2] = 0;
 	}
 	m[SIZE] = t[0];
-
+	*/
 	subCondMont(m, n, SIZE);
 
 
@@ -108,9 +108,9 @@ void subCondMont(uint32_t *u, uint32_t *n, uint32_t SIZE){
 	uint32_t t[SIZE];
 
 	B = 0;
-	for(i = 0; i< SIZE; i++){
-			t[i] = 0;
-	}
+//	for(i = 0; i< SIZE; i++){
+//			t[i] = 0;
+//}
 	for(i = 0; i < SIZE; i++){
 		uint32_t sub;
 		sub = u[i] - n[i] - B;

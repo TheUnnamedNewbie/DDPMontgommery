@@ -262,7 +262,7 @@ UMLAL r4, r5, r8, r9 		@sum = t[0] + a[i]*b[0]
 ADDS r6, r6, r5			@addmont
 ADC r7, r7, #0				@addmont
 
-LDR r9, [sp, #40]			@load n0
+LDR r9, [sp, #36]			@load n0
 MUL r8, r9, r4				@m[i]=n0*S
 STR r8, [r2, r10, LSL #2]	@store m[i]
 LDR r9, [r3]				@Load n[0]
@@ -282,14 +282,68 @@ MOV r11, #0				@j=0
 BLO loopComplete1
 
 
-LDR r5, [sp, #36]			@load *t  FIX THE STACKPOINTER
-STR r4, [r5], #4
-STR r6, [r5], #4
-STR r7, [r5]
 MOV r5, #0
-STR r5, [r2, #128]	@store m[i]
-STR r5, [r2, #132]
+STR r5, [r2, #128]			@store m[SIZE]
+STR r5, [r2, #132]			@stpre m[SIZE+1]
 
+MOV r10, #32				@r10 is i = 32
+
+SUB r11, r10, #31			@r11 is j = i - size + 1
+
+
+
+
+montSumLoopSize2:
+
+
+
+
+
+loopComplete2:
+CMP r11, #32
+BEQ endMontComplete2
+SUB r12, r10, r11			@store i-j in r12
+MOV r5, #0					@C = 0
+
+LDR r8, [r0, r11, LSL #2]	@load a[j]
+LDR r9, [r1, r12, LSL #2]	@load b[i-j]
+
+UMLAL r4, r5, r8, r9 		@sum = t[0] + a*b
+ADDS r6, r6, r5			@addmont
+ADC r7, r7, #0				@addmont
+
+MOV r5, #0					@C = 0
+
+LDR r8, [r2, r11, LSL #2]	@load m[j]
+LDR r9, [r3, r12, LSL #2]	@load n[i-j]
+
+UMLAL r4, r5, r8, r9 		@sum = t[0] + a*b
+ADDS r6, r6, r5			@addmont
+ADC r7, r7, #0				@addmont
+
+ADD r11, #1					@j++
+CMP r11, #32				@j<SIZE
+BLO loopComplete2
+
+endMontComplete2:
+
+
+SUB r11, r10, #32			@r11 = i - size
+STR r4, [r2, r11, LSL #2]	@store m[i-size] = t0
+
+MOV r4, r6					@t[0] = t[1]
+MOV r6, r7					@t[1] = t[2]
+MOV r7, #0					@t[2] = 0
+
+
+
+
+ADD r10, #1				@i++
+SUB r11, r10, #31			@r11 is j = i - size + 1
+CMP r10, #64				@compare i to size*2
+BLO loopComplete2			@if i<size*2 go back to the beginning
+
+STR r4, [r2, #128]			@m[size] = t[0]
 
 POP {r4-r12}
 BX lr

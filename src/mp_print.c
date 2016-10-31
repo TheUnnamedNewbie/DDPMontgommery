@@ -34,6 +34,8 @@ void xprintmp(uint32_t *a, uint32_t size){
 	}
 	for(i = size-1; i>=1; i--){
 		xil_printf("%08x", (*(a+i-1)));		//08x instead of x to force leading zeros.
+		//xil_printf("\r\n%d", i);
+
 	}
 }
 
