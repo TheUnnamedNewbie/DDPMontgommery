@@ -15,6 +15,8 @@
 #include "asm_func.h"
 #include "log.h"
 #include "performance_counters.h"
+#include "mode.h"
+
 /*
  * TODO:
  * Can speed this up with less consecutive printf statements and using just one.
@@ -191,6 +193,7 @@ const char* LogSubSystemToString(LogSubSystem sys){
 		case BLANK: return "BLANK"; break;
 		case PERFORMANCE: return "PERFORMANCE"; break;
 		case MONTGOMMERY: return "MONTGOMMERY"; break;
+		case ASMMONTGOMERY: return "ASMMONTGOMERY"; break;
 		default: LogWithNum(LOGGING, CRITICAL, "NONLEGAL LOGSUBSYSTEM AT LogSubSystemToSTring", (int)sys);
 				  return "NONLEGAL SUBSYSTEM";
 				  break;

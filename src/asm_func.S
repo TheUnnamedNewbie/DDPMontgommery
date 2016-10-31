@@ -37,8 +37,8 @@ bx lr
 .type arr_copy, %function
 
 arr_copy:
-cmp r2, #0
-beq end_add
+cmp r2, #0 @n == 0?
+beq end_copy
 copy_loop:
 	ldr r3, [r0], #4
 	str r3, [r1], #4

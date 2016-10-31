@@ -8,6 +8,8 @@
 #ifndef PERFORMANCE_COUNTERS_H_
 #define PERFORMANCE_COUNTERS_H_
 
+#include <stdint.h>
+
 static inline void init_performance_counters(uint32_t reset) {
 	// Enable all counters (including cycle counter)
 	int32_t value = 1;
