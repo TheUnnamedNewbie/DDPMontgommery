@@ -127,7 +127,10 @@ int main()
 			Log(MAIN, DEBUG, "First test successful");
 		} else {
 			Log(MAIN, CRITICAL, "First test failed");
+			xil_printf("\r");
 			xprintmp(result, SIZE);
+			xil_printf("\r");
+			xprintmp(test_mont_mult_result1, SIZE);
 		}
 
 
@@ -139,7 +142,10 @@ int main()
 				Log(MAIN, DEBUG, "Second test successful");
 		} else {
 			Log(MAIN, CRITICAL, "Second test failed");
+			xil_printf("\r");
 			xprintmp(result, SIZE);
+			xil_printf("\r");
+			xprintmp(test_mont_mult_result2, SIZE);
 		}
 
 
@@ -151,7 +157,10 @@ int main()
 			Log(MAIN, DEBUG, "Third test successful");
 		} else {
 			Log(MAIN, CRITICAL, "Third test failed");
+			xil_printf("\r");
 			xprintmp(result, SIZE);
+			xil_printf("\r");
+			xprintmp(test_mont_mult_result3, SIZE);
 		}
 
 	    uint32_t totalCycles = ((stop_time_1 - start_time_1) + (stop_time_2 - start_time_2) + (stop_time_3 - start_time_3))/3;

@@ -45,24 +45,23 @@ void mont(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
  */
 void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, uint32_t SIZE){
 
+
+
 	uint32_t t[3];
 	uint32_t m[SIZE+1];
 	//uint64_t resultAsm;
 	//uint32_t S, C;
-	int i, j;
-	t[2]=t[1]=t[0]=0;
-	for(i = 0; i<= SIZE; i++){
-			m[i] = 0;
-	}
-	for(i=0; i< SIZE; i++){
-			montSumLoop(a, b, m, n, t, i); //IT HAS TO STILL SKIP FIRST ITERATION
-			//S = (uint32_t)resultAsm;			//TEMP THIS IS NOT HOW THE REAL CODE SHOULD WORK
-			//C = (uint32_t)(resultAsm>>32);
-			//LogWithNumH(ASMMONTGOMERY, DEBUG, "loop i:", S);
-			//LogWithNumH(ASMMONTGOMERY, DEBUG, "loop j:", C);
+	int i;
+	//for(i = 0; i<= SIZE; i++){
+	//		m[i] = 0;
+	//}// I think I'm allowed to comment this
+	montSumComplete(a, b, m, n, t, n0[0]);
 
+
+	/*for(i=0; i< SIZE; i++){
+			montSumLoop(a, b, m, n, t, i);
 			montSum2(a[i], b[0], m[i], n[0], t, m, i, n0[0]);
-	}
+	}*/
 	for(i = SIZE; i < 2*SIZE; i++){  // ASUMING THAT SIZE WILL NEVER BE MORE THAN 31 BITS LONG
 		//for(j = (i - SIZE + 1); j < SIZE; j++){
 		montSumLoopSize(a, b, m, n, t, i, (i-SIZE+1));
@@ -81,6 +80,8 @@ void fips(uint32_t *a, uint32_t *b, uint32_t *n, uint32_t *n0, uint32_t *res, ui
 	for(i = 0; i <SIZE; i++){
 		res[i] = m[i];
 	}
+
+
 
 }
 
