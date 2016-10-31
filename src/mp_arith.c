@@ -160,13 +160,13 @@ void mod_sub(uint32_t *a, uint32_t *b, uint32_t *N, uint32_t *res, uint32_t size
 
 uint32_t mp_geq(uint32_t *a, uint32_t *b, uint32_t size){
 	int i;
-	for(i = size-1;!(!(i>=1)||((*(a+i)) != (*(b+i)))); i=i-1){}
+	for(i = size-1;!(!(i>=1)||((*(a+i)) != (*(b+i)))); i=i-1){} //BECAUSE PROGRAMMING IN STRANGE SINGLE LINE FOR LOOPS IS A SHOW OF SKILL! Right?
 	return ((*(a+i)) >= (*(b+i)));
 }
 
 uint32_t mp_leq(uint32_t *a, uint32_t *b, uint32_t size){
 	uint32_t i;
-	for(i = size-1;!(!(i>=1)||((*(a+i)) != (*(b+i)))); i=i-1){}
+	for(i = size-1;!(!(i>=1)||((*(a+i)) != (*(b+i)))); i=i-1){}  //BECAUSE PROGRAMMING IN STRANGE SINGLE LINE FOR LOOPS IS A SHOW OF SKILL! Right?
 	return ((*(a+i)) <= (*(b+i)));
 }
 
